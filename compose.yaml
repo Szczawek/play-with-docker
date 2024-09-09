@@ -1,0 +1,27 @@
+services:
+  server:
+    build:
+      context: server/.
+    ports:
+      - 443:443
+    env_file:
+      - server/.env
+    networks:
+      - backend
+    depends_on:
+      - databaseOne
+
+  databaseOne:
+    image: mysql:latest
+    ports:
+      - 3307:3306 
+    env_file:
+      - server/.env
+    networks:
+      - backend
+    volumes:
+      - ../initTable.sql:/docker-entrypoint-initdb.d/initTable.sql
+
+networks:
+  backend:
+    name: communication-network
